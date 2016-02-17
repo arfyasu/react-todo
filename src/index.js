@@ -6,7 +6,7 @@ var TaskList = React.createClass({
     };
   },
   addTask(taskName) {
-    var newTask = {id: this.state.nextId, name: taskName};
+    var newTask = {id: this.state.nextId, name: taskName, finished: false};
     this.setState({
       tasks: this.state.tasks.concat([newTask]),
       nextId: this.state.nextId + 1
@@ -16,11 +16,18 @@ var TaskList = React.createClass({
     // TODO
   },
   finishTask(id) {
-    // todo
+    this.setState({
+      task: this.state.tasks.map(task => {
+        if (task.id === id) {
+          task.finished = true;
+        }
+        return task;
+      })
+    });
   },
   render() {
     var tasks = this.state.tasks.map(task => {
-      return <li key={task.id}><Task task={task} /></li>;
+      return <li key={task.id}><Task task={task} finishTask={this.finishTask} /></li>;
     });
     return (
       <ul>
@@ -35,12 +42,32 @@ var Task = React.createClass({
   propTypes: {
     task: React.PropTypes.shape({
       id: React.PropTypes.number.isRequired,
-      name: React.PropTypes.string.isRequired
-    })
+      name: React.PropTypes.string.isRequired,
+      finished: React.PropTypes.bool.isRequired
+    }),
+    finishTask: React.PropTypes.func.isRequired
+  },
+  handleClickCheckBox() {
+    this.props.finishTask(this.props.task.id);
   },
   render() {
     return (
-      <p>{this.props.task.name}</p>
+      <p>
+        {(() => {
+          if (this.props.task.finished) {
+            return (
+              <s>{this.props.task.name}</s>
+            );
+          } else {
+            return (
+              <label>
+                <input type="checkbox" onClick={this.handleClickCheckBox} />
+                {this.props.task.name}
+              </label>
+            );
+          }
+        })()}
+      </p>
     );
   }
 });
