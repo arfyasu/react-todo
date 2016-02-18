@@ -32,7 +32,7 @@ var TaskList = React.createClass({
     return (
       <ul>
         {tasks}
-        <li><TaskCreator addTask={this.addTask} /></li>
+        <li><NewTask addTask={this.addTask} /></li>
       </ul>
     );
   }
@@ -72,33 +72,57 @@ var Task = React.createClass({
   }
 });
 
-var TaskCreator = React.createClass({
+var NewTask = React.createClass({
   propTypes: {
     addTask: React.PropTypes.func.isRequired
   },
   getInitialState() {
     return {
-      edit: false,
-      taskName: ""
+      edit: false
     }
   },
   init() {
-    this.setState({
-      edit: false,
-      taskName: ""
-    })
+    this.setState({edit: false})
+  },
+  cancelEdit() {
+    this.init();
+  },
+  addTask(taskName) {
+    this.props.addTask(taskName);
+    this.init();
   },
   handleClickAddTaskLink() {
-    this.setState({edit: true});
+    this.setState({edit: true})
+  },
+  render() {
+    return (
+      <div>
+        {(this.state.edit)
+          ? <TaskForm submit={this.addTask} cancel={this.cancelEdit} />
+          : <p><a href="#" onClick={this.handleClickAddTaskLink}>Add task</a></p>}
+      </div>
+    );
+  }
+});
+
+
+var TaskForm = React.createClass({
+  propTypes: {
+    submit: React.PropTypes.func.isRequired,
+    cancel: React.PropTypes.func.isRequired
+  },
+  getInitialState() {
+    return {
+      taskName: this.props.taskName || ""
+    }
   },
   handleClickCancelLink() {
-    this.setState({edit: false});
+    this.props.cancel();
   },
   handleClickAddTaskButton() {
     var taskName = this.state.taskName;
     if (taskName.length > 0) {
-      this.props.addTask(taskName);
-      this.init();
+      this.props.submit(taskName);
     }
   },
   handleChangeTaskNameText(e) {
@@ -106,21 +130,11 @@ var TaskCreator = React.createClass({
   },
   render() {
     return (
-      <div>
-        {(() => {
-          if (this.state.edit) {
-            return (
-              <p>
-                <input type="text" value={this.state.taskName} onChange={this.handleChangeTaskNameText}/><br/>
-                <button onClick={this.handleClickAddTaskButton}>Add task</button>
-                <a href="#" onClick={this.handleClickCancelLink}>Cancel</a>
-              </p>
-            );
-          } else {
-            return <p><a href="#" onClick={this.handleClickAddTaskLink}>Add task</a></p>
-          }
-        })()}
-      </div>
+      <p>
+        <input type="text" value={this.state.taskName} onChange={this.handleChangeTaskNameText}/><br/>
+        <button onClick={this.handleClickAddTaskButton}>Add task</button>
+        <a href="#" onClick={this.handleClickCancelLink}>Cancel</a>
+      </p>
     );
   }
 });
