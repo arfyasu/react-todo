@@ -5,15 +5,22 @@ var TaskList = React.createClass({
       nextId: 1
     };
   },
-  addTask(taskName) {
-    var newTask = {id: this.state.nextId, name: taskName, finished: false};
+  createTask(form) {
+    var newTask = {id: this.state.nextId, name: form.name, finished: false};
     this.setState({
       tasks: this.state.tasks.concat([newTask]),
       nextId: this.state.nextId + 1
     });
   },
-  editTask(id) {
-    // TODO
+  updateTask(form) {
+    this.setState({
+      tasks: this.state.tasks.map (task => {
+        if (task.id === form.id) {
+          task.name = form.name;
+        }
+        return task;
+      })
+    });
   },
   finishTask(id) {
     this.setState({
@@ -27,12 +34,12 @@ var TaskList = React.createClass({
   },
   render() {
     var tasks = this.state.tasks.map(task => {
-      return <li key={task.id}><Task task={task} finishTask={this.finishTask} /></li>;
+      return <li key={task.id}><Task task={task} finishTask={this.finishTask} updateTask={this.updateTask} /></li>;
     });
     return (
       <ul>
         {tasks}
-        <li><NewTask addTask={this.addTask} /></li>
+        <li><NewTask addTask={this.createTask} /></li>
       </ul>
     );
   }
@@ -45,29 +52,51 @@ var Task = React.createClass({
       name: React.PropTypes.string.isRequired,
       finished: React.PropTypes.bool.isRequired
     }),
-    finishTask: React.PropTypes.func.isRequired
+    finishTask: React.PropTypes.func.isRequired,
+    updateTask: React.PropTypes.func.isRequired
+  },
+  getInitialState() {
+    return {
+      edit: false
+    }
+  },
+  updateTask(form) {
+    this.props.updateTask(form);
+    this.setState({
+      edit: false
+    });
+  },
+  cancelEdit() {
+    this.setState({edit: false});
   },
   handleClickCheckBox() {
     this.props.finishTask(this.props.task.id);
   },
+  handleDoubleClickTaskName() {
+    this.setState({edit: true});
+  },
   render() {
     return (
-      <p>
+      <div>
         {(() => {
-          if (this.props.task.finished) {
-            return (
-              <s>{this.props.task.name}</s>
-            );
+          if (this.state.edit) {
+            return <TaskForm submit={this.updateTask} cancel={this.cancelEdit} task={this.props.task} />
           } else {
-            return (
-              <label>
-                <input type="checkbox" onClick={this.handleClickCheckBox} />
-                {this.props.task.name}
-              </label>
-            );
+            if (this.props.task.finished) {
+              return <p><s>{this.props.task.name}</s></p>;
+            } else {
+              return (
+                <p>
+                  <input type="checkbox" onClick={this.handleClickCheckBox} />
+                  <label onDoubleClick={this.handleDoubleClickTaskName}>
+                    {this.props.task.name}
+                  </label>
+                </p>
+              );
+            }
           }
         })()}
-      </p>
+      </div>
     );
   }
 });
@@ -87,8 +116,8 @@ var NewTask = React.createClass({
   cancelEdit() {
     this.init();
   },
-  addTask(taskName) {
-    this.props.addTask(taskName);
+  addTask(form) {
+    this.props.addTask(form);
     this.init();
   },
   handleClickAddTaskLink() {
@@ -98,7 +127,7 @@ var NewTask = React.createClass({
     return (
       <div>
         {(this.state.edit)
-          ? <TaskForm submit={this.addTask} cancel={this.cancelEdit} />
+          ? <TaskForm submit={this.addTask} cancel={this.cancelEdit} task={{id: null, name: ""}} />
           : <p><a href="#" onClick={this.handleClickAddTaskLink}>Add task</a></p>}
       </div>
     );
@@ -113,26 +142,26 @@ var TaskForm = React.createClass({
   },
   getInitialState() {
     return {
-      taskName: this.props.taskName || ""
+      name: this.props.task.name
     }
   },
   handleClickCancelLink() {
     this.props.cancel();
   },
-  handleClickAddTaskButton() {
-    var taskName = this.state.taskName;
-    if (taskName.length > 0) {
-      this.props.submit(taskName);
+  handleClickSubmitButton() {
+    var name = this.state.name;
+    if (name.length > 0) {
+      this.props.submit({id: this.props.task.id, name: name});
     }
   },
   handleChangeTaskNameText(e) {
-    this.setState({taskName: e.target.value});
+    this.setState({name: e.target.value});
   },
   render() {
     return (
       <p>
-        <input type="text" value={this.state.taskName} onChange={this.handleChangeTaskNameText}/><br/>
-        <button onClick={this.handleClickAddTaskButton}>Add task</button>
+        <input type="text" value={this.state.name} onChange={this.handleChangeTaskNameText}/><br/>
+        <button onClick={this.handleClickSubmitButton}>{(this.props.task.id) ? "Save" : "Add task"}</button>
         <a href="#" onClick={this.handleClickCancelLink}>Cancel</a>
       </p>
     );
