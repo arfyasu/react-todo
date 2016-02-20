@@ -2,6 +2,7 @@ var TaskList = React.createClass({
   getInitialState() {
     return {
       tasks: [],
+      finishedTasks: [],
       nextId: 1
     };
   },
@@ -23,24 +24,40 @@ var TaskList = React.createClass({
     });
   },
   finishTask(id) {
+    var finishedTask;
+    var tasks = [];
+    this.state.tasks.forEach(task => {
+      if (task.id === id) {
+        task.finished = true;
+        finishedTask = task;
+      } else {
+        tasks.push(task);
+      }
+    });
     this.setState({
-      task: this.state.tasks.map(task => {
-        if (task.id === id) {
-          task.finished = true;
-        }
-        return task;
-      })
+      tasks: tasks,
+      finishedTasks: [finishedTask].concat(this.state.finishedTasks)
     });
   },
   render() {
     var tasks = this.state.tasks.map(task => {
       return <li key={task.id}><Task task={task} finishTask={this.finishTask} updateTask={this.updateTask} /></li>;
     });
+    var finishedTasks = this.state.finishedTasks.map(task => {
+      return <li key={task.id}><Task task={task} updateTask={this.updateTask} /></li>;
+    });
     return (
-      <ul>
-        {tasks}
-        <li><NewTask addTask={this.createTask} /></li>
-      </ul>
+      <div>
+        <ul>
+          {tasks}
+          <li><NewTask addTask={this.createTask} /></li>
+        </ul>
+
+        <h2>Finished tasks</h2>
+        <ul>
+          {finishedTasks}
+        </ul>
+      </div>
     );
   }
 });
@@ -52,7 +69,7 @@ var Task = React.createClass({
       name: React.PropTypes.string.isRequired,
       finished: React.PropTypes.bool.isRequired
     }),
-    finishTask: React.PropTypes.func.isRequired,
+    //finishTask: React.PropTypes.func.isRequired,
     updateTask: React.PropTypes.func.isRequired
   },
   getInitialState() {
@@ -167,5 +184,6 @@ var TaskForm = React.createClass({
     );
   }
 });
+
 
 ReactDOM.render(<TaskList />, document.getElementById('container'));
