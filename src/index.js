@@ -39,12 +39,28 @@ var TaskList = React.createClass({
       finishedTasks: [finishedTask].concat(this.state.finishedTasks)
     });
   },
+  undoTask(id) {
+    var undoTask;
+    var finishedTasks = [];
+    this.state.finishedTasks.forEach(task => {
+      if (task.id === id) {
+        task.finished = false;
+        undoTask = task;
+      } else {
+        finishedTasks.push(task);
+      }
+    });
+    this.setState({
+      tasks: this.state.tasks.concat([undoTask]),
+      finishedTasks: finishedTasks
+    });
+  },
   render() {
     var tasks = this.state.tasks.map(task => {
       return <li key={task.id}><Task task={task} finishTask={this.finishTask} updateTask={this.updateTask} /></li>;
     });
     var finishedTasks = this.state.finishedTasks.map(task => {
-      return <li key={task.id}><Task task={task} updateTask={this.updateTask} /></li>;
+      return <li key={task.id}><Task task={task} undoTask={this.undoTask} updateTask={this.updateTask} /></li>;
     });
     return (
       <div>
@@ -86,11 +102,14 @@ var Task = React.createClass({
   cancelEdit() {
     this.setState({edit: false});
   },
-  handleClickCheckBox() {
+  handleClickFinishCheckBox() {
     this.props.finishTask(this.props.task.id);
   },
   handleDoubleClickTaskName() {
     this.setState({edit: true});
+  },
+  handleClickUndoCheckBox() {
+    this.props.undoTask(this.props.task.id);
   },
   render() {
     return (
@@ -100,11 +119,16 @@ var Task = React.createClass({
             return <TaskForm submit={this.updateTask} cancel={this.cancelEdit} task={this.props.task} />
           } else {
             if (this.props.task.finished) {
-              return <p><s>{this.props.task.name}</s></p>;
+              return (
+                <p>
+                  <input type="checkbox" onClick={this.handleClickUndoCheckBox} />
+                  <s>{this.props.task.name}</s>
+                </p>
+              );
             } else {
               return (
                 <p>
-                  <input type="checkbox" onClick={this.handleClickCheckBox} />
+                  <input type="checkbox" onClick={this.handleClickFinishCheckBox} />
                   <label onDoubleClick={this.handleDoubleClickTaskName}>
                     {this.props.task.name}
                   </label>
