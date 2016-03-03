@@ -1,7 +1,9 @@
-var Button = ReactBootstrap.Button;
-var Input = ReactBootstrap.Input;
-var ListGroup = ReactBootstrap.ListGroup;
-var ListGroupItem = ReactBootstrap.ListGroupItem;
+// CSSを取り込む
+require('../stylesheets/app');
+
+import React from "react";
+import ReactDOM from "react-dom";
+
 
 var TaskList = React.createClass({
   getInitialState() {
@@ -62,25 +64,25 @@ var TaskList = React.createClass({
   },
   render() {
     var tasks = this.state.tasks.map(task => {
-      return <ListGroupItem key={task.id}><Task task={task} finishTask={this.finishTask} updateTask={this.updateTask} /></ListGroupItem>;
+      return <li key={task.id}><Task task={task} finishTask={this.finishTask} updateTask={this.updateTask} /></li>;
     });
     var finishedTasks = this.state.finishedTasks.map(task => {
-      return <ListGroupItem key={task.id}><Task task={task} undoTask={this.undoTask} updateTask={this.updateTask} /></ListGroupItem>;
+      return <li key={task.id}><Task task={task} undoTask={this.undoTask} updateTask={this.updateTask} /></li>;
     });
     return (
       <div>
         <h2>TODO List</h2>
-        <ListGroup>
+        <ul>
           {tasks}
-        </ListGroup>
+        </ul>
         <p>
           <NewTask addTask={this.createTask} />
         </p>
 
         <h2>Finished tasks</h2>
-        <ListGroup>
+        <ul>
           {finishedTasks}
-        </ListGroup>
+        </ul>
       </div>
     );
   }
@@ -121,31 +123,33 @@ var Task = React.createClass({
   },
   render() {
     return (
-      <div>
+      <table>
         {(() => {
           if (this.state.edit) {
             return <TaskForm submit={this.updateTask} cancel={this.cancelEdit} task={this.props.task} />
           } else {
             if (this.props.task.finished) {
               return (
-                <p>
-                  <input type="checkbox" onClick={this.handleClickUndoCheckBox} />
-                  <s>{this.props.task.name}</s>
-                </p>
+                <tr>
+                  <td><input type="checkbox" onClick={this.handleClickUndoCheckBox} /></td>
+                  <td><s>{this.props.task.name}</s></td>
+                </tr>
               );
             } else {
               return (
-                <p>
-                  <input type="checkbox" onClick={this.handleClickFinishCheckBox} />
-                  <label onDoubleClick={this.handleDoubleClickTaskName}>
-                    {this.props.task.name}
-                  </label>
-                </p>
+                <tr>
+                  <td><input type="checkbox" onClick={this.handleClickFinishCheckBox} /></td>
+                  <td>
+                    <label onDoubleClick={this.handleDoubleClickTaskName}>
+                      {this.props.task.name}
+                    </label>
+                  </td>
+                </tr>
               );
             }
           }
         })()}
-      </div>
+      </table>
     );
   }
 });
@@ -174,14 +178,15 @@ var NewTask = React.createClass({
   },
   render() {
     return (
-      <div>
+      <table>
         {(this.state.edit)
           ? <TaskForm submit={this.addTask} cancel={this.cancelEdit} task={{id: null, name: ""}} />
-          : <p><a href="#" onClick={this.handleClickAddTaskLink}>Add task</a></p>}
-      </div>
+          : <tr><td><a href="#" onClick={this.handleClickAddTaskLink}>Add task</a></td></tr>}
+      </table>
     );
   }
 });
+
 
 
 var TaskForm = React.createClass({
@@ -210,11 +215,23 @@ var TaskForm = React.createClass({
   },
   render() {
     return (
-      <form>
-        <Input type="text" value={this.state.name} wrapperClassName="col-xs-4" onChange={this.handleChangeTaskNameText} />
-        <Button bsStyle="primary" bsSize="small" onClick={this.handleClickSubmitButton}>{(this.props.task.id) ? "Save" : "Add task"}</Button>
-        <a href="#" onClick={this.handleClickCancelLink}>Cancel</a>
-      </form>
+      <tr>
+        <td>
+          <form>
+            <table>
+              <tr>
+                <td><input type="text" value={this.state.name} className="col-xs-4" onChange={this.handleChangeTaskNameText} /></td>
+              </tr>
+              <tr>
+                <td>
+                  <button className="primary" bsSize="small" onClick={this.handleClickSubmitButton}>{(this.props.task.id) ? "Save" : "Add task"}</button>
+                  <a href="#" onClick={this.handleClickCancelLink}>Cancel</a>
+                </td>
+              </tr>
+            </table>
+          </form>
+        </td>
+      </tr>
     );
   }
 });
