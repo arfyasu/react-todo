@@ -2,23 +2,31 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
   entry: {
-    app: __dirname + "/src/javascripts/app.js"
+    app: __dirname + "/src/javascripts/app.jsx"
   },
   output: {
     path: __dirname + '/dist/javascripts',
     filename: '[name].js',
   },
   module: {
-    //preLoaders: [
-    //  {
-    //    test: /\.js$/,
-    //    exclude: /node_modules/,
-    //    loader: "eslint"
-    //  }
-    //],
+    preLoaders: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: "eslint"
+      }
+    ],
     loaders: [
       {
         test: /\.js$/,
+        exclude: /node_modules/,
+        loader: "babel",
+        query: {
+          presets: ['react', 'es2015']
+        }
+      },
+      {
+        test: /\.jsx$/,
         exclude: /node_modules/,
         loader: "babel",
         query: {
@@ -36,15 +44,15 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['', '.js', '.scss', '.css']
+    extensions: ['', '.js', '.jsx', '.scss', '.css']
   },
   node: {
     console: true
   },
   plugins: [
     new ExtractTextPlugin("../stylesheets/app.css")
-  ]
-  //eslint: {
-  //  configFile: '.eslintrc'
-  //}
+  ],
+  eslint: {
+    configFile: '.eslintrc'
+  }
 };
