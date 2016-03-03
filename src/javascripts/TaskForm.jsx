@@ -33,21 +33,19 @@ class TaskForm extends React.Component {
 
   render() {
     return (
-      <table>
-        <tbody>
-        <tr>
-          <td>
-            <input type="text" value={this.state.name} className="col-xs-4" onChange={this.handleChangeTaskNameText}/>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <button className="primary" bsSize="small" onClick={this.handleClickSubmitButton}>{(this.props.task.id) ? "Save" : "Add task"}</button>
-            <a href="#" onClick={this.handleClickCancelLink}>Cancel</a>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+      <form className="form-horizontal">
+        <div className="form-group">
+          <div className="col-xs-12">
+            <input type="text" className="form-control" value={this.state.name} onChange={this.handleChangeTaskNameText}/>
+          </div>
+        </div>
+        <div className="form-group">
+          <div className="col-xs-12">
+            <button type="button" className="btn btn-default" onClick={this.handleClickSubmitButton}>{(this.props.task.id) ? "Save" : "Add task"}</button>
+            <button type="button" className="btn btn-link" onClick={this.handleClickCancelLink}>Cancel</button>
+          </div>
+        </div>
+      </form>
     );
   }
 }

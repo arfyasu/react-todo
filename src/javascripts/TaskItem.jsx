@@ -41,35 +41,33 @@ class TaskItem extends React.Component {
 
   render() {
     return (
-      <table>
-        <tbody>
+      <div>
         {(() => {
           if (this.state.edit) {
-            return <TaskForm submit={this.updateTask} cancel={this.cancelEdit} task={this.props.task} />;
+            return (
+              <TaskForm submit={this.updateTask} cancel={this.cancelEdit} task={this.props.task}/>
+            );
           } else {
             if (this.props.task.finished) {
               return (
-                <tr>
-                  <td><input type="checkbox" onClick={this.handleClickUndoCheckBox} /></td>
-                  <td><s>{this.props.task.name}</s></td>
-                </tr>
+                <p>
+                  <input type="checkbox" onClick={this.handleClickUndoCheckBox}/>
+                  <s className="todo-list__tasks-item-text">{this.props.task.name}</s>
+                </p>
               );
             } else {
               return (
-                <tr>
-                  <td><input type="checkbox" onClick={this.handleClickFinishCheckBox} /></td>
-                  <td>
-                    <label onDoubleClick={this.handleDoubleClickTaskName}>
-                      {this.props.task.name}
-                    </label>
-                  </td>
-                </tr>
+                <p>
+                  <input type="checkbox" onClick={this.handleClickFinishCheckBox}/>
+                  <label onDoubleClick={this.handleDoubleClickTaskName} className="todo-list__tasks-item-text">
+                    {this.props.task.name}
+                  </label>
+                </p>
               );
             }
           }
         })()}
-        </tbody>
-      </table>
+      </div>
     );
   }
 }
@@ -80,7 +78,6 @@ TaskItem.propTypes = {
     name: React.PropTypes.string.isRequired,
     finished: React.PropTypes.bool.isRequired
   }),
-  //finishTask: React.PropTypes.func.isRequired,
   updateTask: React.PropTypes.func.isRequired
 };
 

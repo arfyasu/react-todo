@@ -1,12 +1,23 @@
+@import "normalize";
+
 #container {
   width: 500px;
   margin-left: 20px;
 }
 
-.list-group-item {
-  padding: 10px 5px;
-}
-
 .todo-list__tasks {
   list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+.todo-list__tasks-item {
+  margin: 10px;
+  border-bottom: 1px solid #cccccc;
+}
+.todo-list__tasks-item-text {
+  padding: 0px 10px;
+  font-size: 16px;
+}
+.todo-list__tasks-new {
+  padding: 0px 10px;
 }

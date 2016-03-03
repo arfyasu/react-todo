@@ -14,21 +14,21 @@ class NewTask extends React.Component {
     this.handleClickAddTaskLink = this.handleClickAddTaskLink.bind(this);
   }
 
-  init() {
-    this.setState({edit: false})
-  }
-
   cancelEdit() {
-    this.init();
+    this.setState({
+      edit: false
+    })
   }
 
   addTask(form) {
     this.props.addTask(form);
-    this.init();
+    this.cancelEdit();
   }
 
   handleClickAddTaskLink() {
-    this.setState({edit: true})
+    this.setState({
+      edit: true
+    })
   }
 
   render() {
@@ -36,7 +36,7 @@ class NewTask extends React.Component {
       <div>
         {(this.state.edit)
           ? <TaskForm submit={this.addTask} cancel={this.cancelEdit} task={{id: null, name: ""}}/>
-          : <a href="#" onClick={this.handleClickAddTaskLink}>Add task</a>
+          : <button type="button" className="btn btn-link" onClick={this.handleClickAddTaskLink}>Add task</button>
         }
       </div>
     );

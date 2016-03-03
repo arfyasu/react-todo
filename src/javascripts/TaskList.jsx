@@ -73,21 +73,21 @@ class TaskList extends React.Component {
 
   render() {
     var tasks = this.state.tasks.map(task => {
-      return <li key={task.id}><TaskItem task={task} finishTask={this.finishTask} updateTask={this.updateTask} /></li>;
+      return <li className="todo-list__tasks-item" key={task.id}><TaskItem task={task} finishTask={this.finishTask} updateTask={this.updateTask} /></li>;
     });
     var finishedTasks = this.state.finishedTasks.map(task => {
-      return <li key={task.id}><TaskItem task={task} undoTask={this.undoTask} updateTask={this.updateTask} /></li>;
+      return <li className="todo-list__tasks-item" key={task.id}><TaskItem task={task} undoTask={this.undoTask} updateTask={this.updateTask} /></li>;
     });
     return (
       <div>
         <h2>TODO List</h2>
         <ul className="todo-list__tasks">
           {tasks}
+          <li className="todo-list__tasks-new"><NewTask addTask={this.createTask} /></li>
         </ul>
-        <NewTask addTask={this.createTask} />
 
         <h2>Finished tasks</h2>
-        <ul>
+        <ul className="todo-list__tasks">
           {finishedTasks}
         </ul>
       </div>
