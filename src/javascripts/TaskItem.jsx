@@ -78,7 +78,9 @@ TaskItem.propTypes = {
     name: React.PropTypes.string.isRequired,
     finished: React.PropTypes.bool.isRequired
   }),
-  updateTask: React.PropTypes.func.isRequired
+  updateTask: React.PropTypes.func.isRequired,
+  finishTask: React.PropTypes.func,
+  undoTask: React.PropTypes.func
 };
 
 export default TaskItem;

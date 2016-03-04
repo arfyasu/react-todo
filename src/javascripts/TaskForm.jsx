@@ -26,9 +26,8 @@ class TaskForm extends React.Component {
 
   handleChangeTaskNameText(e) {
     this.setState({
-        name: e.target.value
-      }
-    );
+      name: e.target.value
+    });
   }
 
   render() {
@@ -36,12 +35,14 @@ class TaskForm extends React.Component {
       <form className="form-horizontal">
         <div className="form-group">
           <div className="col-xs-12">
-            <input type="text" className="form-control" value={this.state.name} onChange={this.handleChangeTaskNameText}/>
+            <input type="text" className="form-control" value={this.state.name}
+                   onChange={this.handleChangeTaskNameText}/>
           </div>
         </div>
         <div className="form-group">
           <div className="col-xs-12">
-            <button type="button" className="btn btn-default" onClick={this.handleClickSubmitButton}>{(this.props.task.id) ? "Save" : "Add task"}</button>
+            <button type="button" className="btn btn-default"
+                    onClick={this.handleClickSubmitButton}>{(this.props.task.id) ? "Save" : "Add task"}</button>
             <button type="button" className="btn btn-link" onClick={this.handleClickCancelLink}>Cancel</button>
           </div>
         </div>
@@ -51,6 +52,10 @@ class TaskForm extends React.Component {
 }
 
 TaskForm.propTypes = {
+  task: React.PropTypes.shape({
+    id: React.PropTypes.number.isRequired,
+    name: React.PropTypes.string.isRequired
+  }),
   submit: React.PropTypes.func.isRequired,
   cancel: React.PropTypes.func.isRequired
 };

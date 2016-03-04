@@ -17,7 +17,7 @@ class NewTask extends React.Component {
   cancelEdit() {
     this.setState({
       edit: false
-    })
+    });
   }
 
   addTask(form) {
@@ -28,7 +28,7 @@ class NewTask extends React.Component {
   handleClickAddTaskLink() {
     this.setState({
       edit: true
-    })
+    });
   }
 
   render() {
