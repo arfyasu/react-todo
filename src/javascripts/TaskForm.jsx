@@ -1,16 +1,22 @@
+require("react-datepicker/dist/react-datepicker.css");
+
 import React from "react";
+import DatePicker from "react-datepicker";
+import moment from "moment";
 
 class TaskForm extends React.Component {
   constructor(props) {
     super(props);
     // state
     this.state = {
-      name: this.props.task.name
+      name: this.props.task.name,
+      deadline: this.props.task.deadline || moment()
     };
     // bind
     this.handleClickCancelLink = this.handleClickCancelLink.bind(this);
     this.handleClickSubmitButton = this.handleClickSubmitButton.bind(this);
     this.handleChangeTaskNameText = this.handleChangeTaskNameText.bind(this);
+    this.handleChangeDeadLine = this.handleChangeDeadLine.bind(this);
   }
 
   handleClickCancelLink() {
@@ -20,7 +26,11 @@ class TaskForm extends React.Component {
   handleClickSubmitButton() {
     var name = this.state.name;
     if (name.length > 0) {
-      this.props.submit({id: this.props.task.id, name: name});
+      this.props.submit({
+        id: this.props.task.id,
+        name: name,
+        deadline: this.state.deadline
+      });
     }
   }
 
@@ -30,19 +40,28 @@ class TaskForm extends React.Component {
     });
   }
 
+  handleChangeDeadLine(date) {
+    this.setState({
+      deadline: date
+    });
+  }
+
   render() {
     return (
       <form className="form-horizontal">
         <div className="form-group">
-          <div className="col-xs-12">
-            <input type="text" className="form-control" value={this.state.name}
-                   onChange={this.handleChangeTaskNameText}/>
+          <div className="col-xs-8">
+            <input type="text" className="form-control" value={this.state.name} onChange={this.handleChangeTaskNameText}/>
+          </div>
+          <div className="col-xs-4">
+            <DatePicker selected={this.state.deadline} onChange={this.handleChangeDeadLine} className="form-control"/>
           </div>
         </div>
         <div className="form-group">
           <div className="col-xs-12">
-            <button type="button" className="btn btn-default"
-                    onClick={this.handleClickSubmitButton}>{(this.props.task.id) ? "Save" : "Add task"}</button>
+            <button type="button" className="btn btn-default" onClick={this.handleClickSubmitButton}>
+              {(this.props.task.id) ? "Save" : "Add task"}
+            </button>
             <button type="button" className="btn btn-link" onClick={this.handleClickCancelLink}>Cancel</button>
           </div>
         </div>
@@ -53,8 +72,9 @@ class TaskForm extends React.Component {
 
 TaskForm.propTypes = {
   task: React.PropTypes.shape({
-    id: React.PropTypes.number.isRequired,
-    name: React.PropTypes.string.isRequired
+    id: React.PropTypes.number,
+    name: React.PropTypes.string.isRequired,
+    deadline: React.PropTypes.object
   }),
   submit: React.PropTypes.func.isRequired,
   cancel: React.PropTypes.func.isRequired

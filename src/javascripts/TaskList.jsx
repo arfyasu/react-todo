@@ -19,7 +19,11 @@ class TaskList extends React.Component {
   }
 
   createTask(form) {
-    var newTask = {id: this.state.nextId, name: form.name, finished: false};
+    var newTask = {
+      id: this.state.nextId,
+      name: form.name,
+      deadline: form.deadline,
+      finished: false};
     this.setState({
       tasks: this.state.tasks.concat([newTask]),
       nextId: this.state.nextId + 1
@@ -31,6 +35,7 @@ class TaskList extends React.Component {
       tasks: this.state.tasks.map(task => {
         if (task.id === form.id) {
           task.name = form.name;
+          task.deadline = form.deadline;
         }
         return task;
       })
@@ -73,8 +78,11 @@ class TaskList extends React.Component {
 
   render() {
     var tasks = this.state.tasks.map(task => {
-      return <li className="todo-list__tasks-item" key={task.id}><TaskItem task={task} finishTask={this.finishTask}
-                                                                           updateTask={this.updateTask}/></li>;
+      return (
+        <li className="todo-list__tasks-item" key={task.id}>
+          <TaskItem task={task} finishTask={this.finishTask} updateTask={this.updateTask}/>
+        </li>
+      );
     });
     var finishedTasks = this.state.finishedTasks.map(task => {
       return <li className="todo-list__tasks-item" key={task.id}><TaskItem task={task} undoTask={this.undoTask}

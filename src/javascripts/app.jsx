@@ -6,6 +6,6 @@ import ReactDOM from "react-dom";
 import TaskList from "./TaskList";
 
 ReactDOM.render(
-  <TaskList />,
+  <TaskList/>,
   document.getElementById("container")
 );

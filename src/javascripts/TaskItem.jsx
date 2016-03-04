@@ -40,6 +40,7 @@ class TaskItem extends React.Component {
   }
 
   render() {
+    var deadline = (this.props.task.deadline) ? this.props.task.deadline.format("YYYY/MM/DD") : "";
     return (
       <div>
         {(() => {
@@ -53,6 +54,9 @@ class TaskItem extends React.Component {
                 <p>
                   <input type="checkbox" onClick={this.handleClickUndoCheckBox}/>
                   <s className="todo-list__tasks-item-text">{this.props.task.name}</s>
+                  <span className="pull-right">
+                    {deadline}
+                  </span>
                 </p>
               );
             } else {
@@ -62,6 +66,9 @@ class TaskItem extends React.Component {
                   <label onDoubleClick={this.handleDoubleClickTaskName} className="todo-list__tasks-item-text">
                     {this.props.task.name}
                   </label>
+                  <span className="pull-right">
+                    {deadline}
+                  </span>
                 </p>
               );
             }
@@ -76,6 +83,7 @@ TaskItem.propTypes = {
   task: React.PropTypes.shape({
     id: React.PropTypes.number.isRequired,
     name: React.PropTypes.string.isRequired,
+    deadline: React.PropTypes.object,
     finished: React.PropTypes.bool.isRequired
   }),
   updateTask: React.PropTypes.func.isRequired,

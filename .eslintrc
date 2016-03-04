@@ -32,9 +32,8 @@
       2,
       "always"
     ],
-    "no-unused-vars": [
-      1, {"vars": "all", "args": "after-used"}
-    ],
-    "no-console": 1
+    "no-console": 0,
+    "comma-dangle": [2, "never"],
+    "react/jsx-space-before-closing": [2, "never"]
   }
 }
