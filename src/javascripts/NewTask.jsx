@@ -1,7 +1,7 @@
-import React from "react";
+import React, {Component, PropTypes} from "react";
 import TaskForm from "./TaskForm";
 
-class NewTask extends React.Component {
+class NewTask extends Component {
   constructor(props) {
     super(props);
     // state
@@ -44,7 +44,7 @@ class NewTask extends React.Component {
 }
 
 NewTask.propTypes = {
-  addTask: React.PropTypes.func.isRequired
+  addTask: PropTypes.func.isRequired
 };
 
 export default NewTask;

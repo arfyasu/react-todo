@@ -1,8 +1,8 @@
-import React from "react";
+import React, {Component} from "react";
 import TaskItem from "./TaskItem";
 import NewTask from "./NewTask";
 
-class TaskList extends React.Component {
+class TaskList extends Component {
   constructor(prop) {
     super(prop);
     // state

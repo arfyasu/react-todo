@@ -1,7 +1,7 @@
-import React from "react";
+import React, {Component, PropTypes} from "react";
 import TaskForm from "./TaskForm";
 
-class TaskItem extends React.Component {
+class TaskItem extends Component {
   constructor(prop) {
     super(prop);
     // state
@@ -80,15 +80,15 @@ class TaskItem extends React.Component {
 }
 
 TaskItem.propTypes = {
-  task: React.PropTypes.shape({
-    id: React.PropTypes.number.isRequired,
-    name: React.PropTypes.string.isRequired,
-    deadline: React.PropTypes.object,
-    finished: React.PropTypes.bool.isRequired
+  task: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    deadline: PropTypes.object,
+    finished: PropTypes.bool.isRequired
   }),
-  updateTask: React.PropTypes.func.isRequired,
-  finishTask: React.PropTypes.func,
-  undoTask: React.PropTypes.func
+  updateTask: PropTypes.func.isRequired,
+  finishTask: PropTypes.func,
+  undoTask: PropTypes.func
 };
 
 export default TaskItem;

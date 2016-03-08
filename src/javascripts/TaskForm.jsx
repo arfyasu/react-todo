@@ -1,10 +1,10 @@
 require("react-datepicker/dist/react-datepicker.css");
 
-import React from "react";
+import React, {Component, PropTypes} from "react";
 import DatePicker from "react-datepicker";
 import moment from "moment";
 
-class TaskForm extends React.Component {
+class TaskForm extends Component {
   constructor(props) {
     super(props);
     // state
@@ -71,13 +71,13 @@ class TaskForm extends React.Component {
 }
 
 TaskForm.propTypes = {
-  task: React.PropTypes.shape({
-    id: React.PropTypes.number,
-    name: React.PropTypes.string.isRequired,
-    deadline: React.PropTypes.object
+  task: PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string.isRequired,
+    deadline: PropTypes.object
   }),
-  submit: React.PropTypes.func.isRequired,
-  cancel: React.PropTypes.func.isRequired
+  submit: PropTypes.func.isRequired,
+  cancel: PropTypes.func.isRequired
 };
 
 export default TaskForm;
