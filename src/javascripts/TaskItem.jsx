@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from "react";
+import ClassNames from "classnames";
 import TaskForm from "./TaskForm";
 
 class TaskItem extends Component {
@@ -39,42 +40,44 @@ class TaskItem extends Component {
     this.props.undoTask(this.props.task.id);
   }
 
-  render() {
-    var deadline = (this.props.task.deadline) ? this.props.task.deadline.format("YYYY/MM/DD") : "";
+  buildCompleteTask() {
     return (
-      <div>
-        {(() => {
-          if (this.state.edit) {
-            return (
-              <TaskForm submit={this.updateTask} cancel={this.cancelEdit} task={this.props.task}/>
-            );
-          } else {
-            if (this.props.task.finished) {
-              return (
-                <p>
-                  <input type="checkbox" onClick={this.handleClickUndoCheckBox}/>
-                  <s className="todo-list__tasks-item-text">{this.props.task.name}</s>
-                  <span className="pull-right">
-                    {deadline}
-                  </span>
-                </p>
-              );
-            } else {
-              return (
-                <p>
-                  <input type="checkbox" onClick={this.handleClickFinishCheckBox}/>
-                  <label onDoubleClick={this.handleDoubleClickTaskName} className="todo-list__tasks-item-text">
-                    {this.props.task.name}
-                  </label>
-                  <span className="pull-right">
-                    {deadline}
-                  </span>
-                </p>
-              );
-            }
-          }
-        })()}
-      </div>
+      <p>
+        <input type="checkbox" onClick={this.handleClickUndoCheckBox}/>
+        <label className="todo-list__item-text todo-list__item-text--completed">{this.props.task.name}</label>
+        <span className="pull-right todo-list__item-text--completed">{this.getDeadLine()}</span>
+      </p>
+    );
+  }
+
+  buildTask() {
+    return (
+      <p>
+        <input type="checkbox" onClick={this.handleClickFinishCheckBox}/>
+        <label onDoubleClick={this.handleDoubleClickTaskName} className="todo-list__item-text">
+          {this.props.task.name}
+        </label>
+        <span className="pull-right">{this.getDeadLine()}</span>
+      </p>
+    );
+  }
+
+  getDeadLine() {
+    return (this.props.task.deadline) ? this.props.task.deadline.format("YYYY/MM/DD") : "";
+  }
+
+  render() {
+    var liClass = ClassNames({
+      "todo-list__item": true,
+      "todo-list__item--completed": this.props.task.finished
+    });
+    return (
+      <li className={liClass}>
+        {(this.state.edit)
+          ? <TaskForm submit={this.updateTask} cancel={this.cancelEdit} task={this.props.task}/>
+          :(this.props.task.finished) ? this.buildCompleteTask() : this.buildTask()
+        }
+      </li>
     );
   }
 }

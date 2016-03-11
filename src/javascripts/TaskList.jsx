@@ -23,7 +23,8 @@ class TaskList extends Component {
       id: this.state.nextId,
       name: form.name,
       deadline: form.deadline,
-      finished: false};
+      finished: false
+    };
     this.setState({
       tasks: this.state.tasks.concat([newTask]),
       nextId: this.state.nextId + 1
@@ -76,29 +77,24 @@ class TaskList extends Component {
     });
   }
 
+  buildTaskList(tasks) {
+    return tasks.map(task => {
+      return <TaskItem key={task.id} task={task} finishTask={this.finishTask} undoTask={this.undoTask} updateTask={this.updateTask}/>;
+    });
+  }
+
   render() {
-    var tasks = this.state.tasks.map(task => {
-      return (
-        <li className="todo-list__tasks-item" key={task.id}>
-          <TaskItem task={task} finishTask={this.finishTask} updateTask={this.updateTask}/>
-        </li>
-      );
-    });
-    var finishedTasks = this.state.finishedTasks.map(task => {
-      return <li className="todo-list__tasks-item" key={task.id}><TaskItem task={task} undoTask={this.undoTask}
-                                                                           updateTask={this.updateTask}/></li>;
-    });
     return (
       <div>
         <h2>TODO List</h2>
-        <ul className="todo-list__tasks">
-          {tasks}
-          <li className="todo-list__tasks-new"><NewTask addTask={this.createTask}/></li>
+        <ul className="todo-list">
+          {this.buildTaskList(this.state.tasks)}
+          <li className="todo-list__item--new"><NewTask addTask={this.createTask}/></li>
         </ul>
 
         <h2>Finished tasks</h2>
-        <ul className="todo-list__tasks">
-          {finishedTasks}
+        <ul className="todo-list">
+          {this.buildTaskList(this.state.finishedTasks)}
         </ul>
       </div>
     );
