@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from "react";
-import ClassNames from "classnames";
 import TaskForm from "./TaskForm";
 
 class TaskItem extends Component {
@@ -14,7 +13,6 @@ class TaskItem extends Component {
     this.cancelEdit = this.cancelEdit.bind(this);
     this.handleClickFinishCheckBox = this.handleClickFinishCheckBox.bind(this);
     this.handleDoubleClickTaskName = this.handleDoubleClickTaskName.bind(this);
-    this.handleClickUndoCheckBox = this.handleClickUndoCheckBox.bind(this);
   }
 
   updateTask(form) {
@@ -36,20 +34,6 @@ class TaskItem extends Component {
     this.setState({edit: true});
   }
 
-  handleClickUndoCheckBox() {
-    this.props.undoTask(this.props.task.id);
-  }
-
-  buildCompleteTask() {
-    return (
-      <p>
-        <input type="checkbox" onClick={this.handleClickUndoCheckBox}/>
-        <label className="todo-list__item-text todo-list__item-text--completed">{this.props.task.name}</label>
-        <span className="pull-right todo-list__item-text--completed">{this.getDeadLine()}</span>
-      </p>
-    );
-  }
-
   buildTask() {
     return (
       <p>
@@ -67,15 +51,11 @@ class TaskItem extends Component {
   }
 
   render() {
-    var liClass = ClassNames({
-      "todo-list__item": true,
-      "todo-list__item--completed": this.props.task.finished
-    });
     return (
-      <li className={liClass}>
+      <li className="todo-list__item">
         {(this.state.edit)
           ? <TaskForm submit={this.updateTask} cancel={this.cancelEdit} task={this.props.task}/>
-          :(this.props.task.finished) ? this.buildCompleteTask() : this.buildTask()
+          : this.buildTask()
         }
       </li>
     );
@@ -91,7 +71,7 @@ TaskItem.propTypes = {
   }),
   updateTask: PropTypes.func.isRequired,
   finishTask: PropTypes.func,
-  undoTask: PropTypes.func
+  onMouseDown: PropTypes.func
 };
 
 export default TaskItem;
