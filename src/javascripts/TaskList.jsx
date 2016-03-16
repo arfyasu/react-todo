@@ -1,7 +1,7 @@
 import React, {Component} from "react";
-import TaskItem from "./TaskItem";
-import NewTask from "./NewTask";
+import ActiveTaskList from "./ActiveTaskList";
 import FinishedTaskList from "./FinishedTaskList";
+import NewTask from "./NewTask";
 
 class TaskList extends Component {
   constructor(prop) {
@@ -10,8 +10,7 @@ class TaskList extends Component {
     this.state = {
       tasks: [],
       finishedTasks: [],
-      nextId: 1,
-      isDragging: false
+      nextId: 1
     };
     // bind
     this.createTask = this.createTask.bind(this);
@@ -79,35 +78,13 @@ class TaskList extends Component {
     });
   }
 
-  /**
-   * 未完了のタスクリストを返す
-   * @param tasks
-   * @returns {*}
-   */
-  buildTaskList(tasks) {
-    return tasks.map(task => {
-      return (
-        <TaskItem
-          key={task.id} task={task}
-          finishTask={this.finishTask}
-          updateTask={this.updateTask}/>
-      );
-    });
-  }
-
-  handleMouseDown() {
-    this.setState({
-      isDragging: true
-    });
-    console.log(this.state.isDragging);
-  }
-
   render() {
     return (
       <div>
         <h2>TODO List</h2>
+        <ActiveTaskList tasks={this.state.tasks} finishTask={this.finishTask} updateTask={this.updateTask}/>
+
         <ul className="todo-list">
-          {this.buildTaskList(this.state.tasks)}
           <li className="todo-list__item--new"><NewTask addTask={this.createTask}/></li>
         </ul>
 

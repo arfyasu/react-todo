@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from "react";
 import TaskForm from "./TaskForm";
 
-class TaskItem extends Component {
+class ActiveTaskItem extends Component {
   constructor(prop) {
     super(prop);
     // state
@@ -62,7 +62,7 @@ class TaskItem extends Component {
   }
 }
 
-TaskItem.propTypes = {
+ActiveTaskItem.propTypes = {
   task: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
@@ -74,4 +74,4 @@ TaskItem.propTypes = {
   onMouseDown: PropTypes.func
 };
 
-export default TaskItem;
+export default ActiveTaskItem;
