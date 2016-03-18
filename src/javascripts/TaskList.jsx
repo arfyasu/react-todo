@@ -17,6 +17,7 @@ class TaskList extends Component {
     this.updateTask = this.updateTask.bind(this);
     this.finishTask = this.finishTask.bind(this);
     this.undoTask = this.undoTask.bind(this);
+    this.moveTask = this.moveTask.bind(this);
   }
 
   createTask(form) {
@@ -78,18 +79,42 @@ class TaskList extends Component {
     });
   }
 
+  //function reinsert(arr, from, to) {
+//  const _arr = arr.slice(0);
+//  const val = _arr[from];
+//  _arr.splice(from, 1);
+//  _arr.splice(to, 0, val);
+//  return _arr;
+//}
+  moveTask(from, to) {
+    let tasks = this.state.tasks;
+    //const tmp = tasks[to];
+    //tasks[to] = tasks[from];
+    //tasks[from] = tmp;
+    const val = tasks[from];
+    tasks.splice(from, 1);
+    tasks.splice(to, 0, val);
+    this.setState({tasks: tasks});
+  }
+
   render() {
     return (
       <div>
         <h2>TODO List</h2>
-        <ActiveTaskList tasks={this.state.tasks} finishTask={this.finishTask} updateTask={this.updateTask}/>
+        <div className="todo">
+          <ActiveTaskList tasks={this.state.tasks} finishTask={this.finishTask} updateTask={this.updateTask} moveTask={this.moveTask}/>
+        </div>
 
-        <ul className="todo-list">
-          <li className="todo-list__item--new"><NewTask addTask={this.createTask}/></li>
-        </ul>
+        <div className="todo">
+          <ul className="todo-new">
+            <li className="todo-new__item"><NewTask addTask={this.createTask}/></li>
+          </ul>
+        </div>
 
         <h2>Finished tasks</h2>
-        <FinishedTaskList tasks={this.state.finishedTasks} undoTask={this.undoTask}/>
+        <div className="todo">
+          <FinishedTaskList tasks={this.state.finishedTasks} undoTask={this.undoTask}/>
+        </div>
       </div>
     );
   }

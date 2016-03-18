@@ -7,15 +7,19 @@
 
 .todo-list {
   list-style: none;
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
+  width: 100%;
 }
 .todo-list__item {
-  margin: 10px;
+  padding: 10px;
+  margin: 0;
+  height: 50px;
+  width: 100%;
   border-bottom: 1px solid #cccccc;
 }
 .todo-list__item-text {
-  padding: 0px 10px;
+  padding: 0 10px;
   font-size: 16px;
 }
 .todo-list__item-text--completed {
@@ -24,7 +28,15 @@
   font-weight: normal;
 }
 
-.todo-list__item--new {
-  padding: 0px 10px;
+.todo-new {
+  list-style: none;
+  clear: both;
+  padding: 0 10px;
+  margin: 0 10px;
+}
+
+.todo-new__item {
+  padding: 0 10px;
+  z-index: 100;
 }
 

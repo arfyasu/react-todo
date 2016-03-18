@@ -51,8 +51,17 @@ class ActiveTaskItem extends Component {
   }
 
   render() {
+    const id = this.props.task.id;
+    const {scale, y} = this.props.motionStyle;
+    const style = {
+      transform: `translate3d(0, ${y}px, 0) scale(${scale})`,
+      WebkitTransform: `translate3d(0, ${y}px, 0) scale(${scale})`
+      //zIndex: i === lastPressed ? 99 : i,
+    };
     return (
-      <li className="todo-list__item">
+      <li className="todo-list__item" style={style}
+          onMouseDown={this.props.mouseDown.bind(null, id, y)}
+          onTouchStart={this.props.touchStart.bind(null, id, y)}>
         {(this.state.edit)
           ? <TaskForm submit={this.updateTask} cancel={this.cancelEdit} task={this.props.task}/>
           : this.buildTask()
@@ -70,8 +79,10 @@ ActiveTaskItem.propTypes = {
     finished: PropTypes.bool.isRequired
   }),
   updateTask: PropTypes.func.isRequired,
-  finishTask: PropTypes.func,
-  onMouseDown: PropTypes.func
+  finishTask: PropTypes.func.isRequired,
+  mouseDown: PropTypes.func.isRequired,
+  touchStart: PropTypes.func.isRequired,
+  motionStyle: PropTypes.object.isRequired
 };
 
 export default ActiveTaskItem;
