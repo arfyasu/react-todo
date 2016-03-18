@@ -17,6 +17,8 @@ class TaskList extends Component {
     this.updateTask = this.updateTask.bind(this);
     this.finishTask = this.finishTask.bind(this);
     this.undoTask = this.undoTask.bind(this);
+    this.findTask = this.findTask.bind(this);
+    this.moveTask = this.moveTask.bind(this);
   }
 
   createTask(form) {
@@ -78,11 +80,30 @@ class TaskList extends Component {
     });
   }
 
+  findTask(id) {
+    const {tasks} = this.state;
+    const task = tasks.filter(task => task.id === id)[0];
+    return {
+      task,
+      index: tasks.indexOf(task)
+    };
+  }
+
+  moveTask(id, toIndex) {
+    const {tasks} = this.state;
+    let { task, index } = this.findTask(id);
+    tasks.splice(index, 1);
+    tasks.splice(toIndex, 0, task);
+    this.setState({tasks});
+  }
+
+
   render() {
     return (
       <div>
         <h2>TODO List</h2>
-        <ActiveTaskList tasks={this.state.tasks} finishTask={this.finishTask} updateTask={this.updateTask}/>
+        <ActiveTaskList tasks={this.state.tasks} finishTask={this.finishTask} updateTask={this.updateTask}
+                        findTask={this.findTask} moveTask={this.moveTask}/>
 
         <ul className="todo-list">
           <li className="todo-list__item--new"><NewTask addTask={this.createTask}/></li>

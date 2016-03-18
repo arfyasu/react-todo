@@ -4,12 +4,6 @@ import FinishedTaskItem from "./FinishedTaskItem";
 class FinishedTaskList extends Component {
   constructor(prop) {
     super(prop);
-    // bind
-    this.throwUndoTask = this.throwUndoTask.bind(this);
-  }
-
-  throwUndoTask(id) {
-    this.props.undoTask(id);
   }
 
   /**
@@ -18,7 +12,7 @@ class FinishedTaskList extends Component {
    */
   buildFinishedTaskList() {
     return this.props.tasks.map(task => {
-      return <FinishedTaskItem key={task.id} task={task} undoTask={this.throwUndoTask}/>;
+      return <FinishedTaskItem key={task.id} task={task} undoTask={this.props.undoTask}/>;
     });
   }
 

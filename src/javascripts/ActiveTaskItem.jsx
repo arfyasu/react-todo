@@ -1,24 +1,57 @@
 import React, {Component, PropTypes} from "react";
 import TaskForm from "./TaskForm";
-import { DragSource } from "react-dnd";
+import {DragSource, DropTarget} from "react-dnd";
+import flow from "lodash/flow";
 
 /**
  * Implements the drag source contract.
  */
 const taskSource = {
-  beginDrag() {
+  beginDrag(props) {
     return {
+      id: props.task.id,
+      originalIndex: props.findTask(props.task.id).index
     };
+  },
+
+  endDrag(props, monitor) {
+    const { id, originalIndex } = monitor.getItem();
+    if (!monitor.didDrop()) {
+      // 元に戻す
+      props.moveTask(id, originalIndex);
+    }
   }
 };
 
 /**
  * Specifies the props to inject into your component.
  */
-function collect(connect, monitor) {
+function collectSource(connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging()
+  };
+}
+
+const taskTarget = {
+  canDrop() {
+    return false;
+  },
+
+  hover(props, monitor) {
+    const { id: draggedId } = monitor.getItem();
+    const overId = props.task.id;
+
+    if (draggedId !== overId) {
+      const { index } = props.findTask(overId);
+      props.moveTask(draggedId, index);
+    }
+  }
+};
+
+function collectTarget(connect) {
+  return {
+    connectDropTarget: connect.dropTarget()
   };
 }
 
@@ -71,16 +104,16 @@ class ActiveTaskItem extends Component {
   }
 
   render() {
-    const { connectDragSource, isDragging } = this.props;
-    const opacity = isDragging ? 0.5 : 1;
-    return connectDragSource(
+    const { connectDragSource, isDragging, connectDropTarget } = this.props;
+    const opacity = isDragging ? 0 : 1;
+    return connectDragSource(connectDropTarget(
       <li className="todo-list__item" style={{opacity}}>
         {(this.state.edit)
           ? <TaskForm submit={this.updateTask} cancel={this.cancelEdit} task={this.props.task}/>
           : this.buildTask()
         }
       </li>
-    );
+    ));
   }
 }
 
@@ -93,10 +126,16 @@ ActiveTaskItem.propTypes = {
   }),
   updateTask: PropTypes.func.isRequired,
   finishTask: PropTypes.func.isRequired,
+  findTask: PropTypes.func.isRequired,
+  moveTask: PropTypes.func.isRequired,
   // Injected by React DnD:
   isDragging: PropTypes.bool.isRequired,
-  connectDragSource: PropTypes.func.isRequired
+  connectDragSource: PropTypes.func.isRequired,
+  connectDropTarget: PropTypes.func.isRequired
 };
 
 
-export default DragSource("task", taskSource, collect)(ActiveTaskItem);
+export default flow(
+  DragSource("task", taskSource, collectSource),
+  DropTarget("task", taskTarget, collectTarget)
+)(ActiveTaskItem);

@@ -13,14 +13,9 @@ class TaskForm extends Component {
       deadline: this.props.task.deadline || moment()
     };
     // bind
-    this.handleClickCancelLink = this.handleClickCancelLink.bind(this);
     this.handleClickSubmitButton = this.handleClickSubmitButton.bind(this);
     this.handleChangeTaskNameText = this.handleChangeTaskNameText.bind(this);
     this.handleChangeDeadLine = this.handleChangeDeadLine.bind(this);
-  }
-
-  handleClickCancelLink() {
-    this.props.cancel();
   }
 
   handleClickSubmitButton() {
@@ -62,7 +57,7 @@ class TaskForm extends Component {
             <button type="button" className="btn btn-default" onClick={this.handleClickSubmitButton}>
               {(this.props.task.id) ? "Save" : "Add task"}
             </button>
-            <button type="button" className="btn btn-link" onClick={this.handleClickCancelLink}>Cancel</button>
+            <button type="button" className="btn btn-link" onClick={this.props.cancel}>Cancel</button>
           </div>
         </div>
       </form>
