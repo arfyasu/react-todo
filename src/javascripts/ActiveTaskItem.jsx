@@ -1,5 +1,27 @@
 import React, {Component, PropTypes} from "react";
 import TaskForm from "./TaskForm";
+import { DragSource } from "react-dnd";
+
+/**
+ * Implements the drag source contract.
+ */
+const taskSource = {
+  beginDrag() {
+    return {
+    };
+  }
+};
+
+/**
+ * Specifies the props to inject into your component.
+ */
+function collect(connect, monitor) {
+  return {
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging()
+  };
+}
+
 
 class ActiveTaskItem extends Component {
   constructor(prop) {
@@ -17,9 +39,7 @@ class ActiveTaskItem extends Component {
 
   updateTask(form) {
     this.props.updateTask(form);
-    this.setState({
-      edit: false
-    });
+    this.cancelEdit();
   }
 
   cancelEdit() {
@@ -51,8 +71,10 @@ class ActiveTaskItem extends Component {
   }
 
   render() {
-    return (
-      <li className="todo-list__item">
+    const { connectDragSource, isDragging } = this.props;
+    const opacity = isDragging ? 0.5 : 1;
+    return connectDragSource(
+      <li className="todo-list__item" style={{opacity}}>
         {(this.state.edit)
           ? <TaskForm submit={this.updateTask} cancel={this.cancelEdit} task={this.props.task}/>
           : this.buildTask()
@@ -70,8 +92,11 @@ ActiveTaskItem.propTypes = {
     finished: PropTypes.bool.isRequired
   }),
   updateTask: PropTypes.func.isRequired,
-  finishTask: PropTypes.func,
-  onMouseDown: PropTypes.func
+  finishTask: PropTypes.func.isRequired,
+  // Injected by React DnD:
+  isDragging: PropTypes.bool.isRequired,
+  connectDragSource: PropTypes.func.isRequired
 };
 
-export default ActiveTaskItem;
+
+export default DragSource("task", taskSource, collect)(ActiveTaskItem);

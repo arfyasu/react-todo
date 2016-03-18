@@ -1,13 +1,11 @@
 import React, {Component, PropTypes} from "react";
+import { DragDropContext } from "react-dnd";
+import HTML5Backend from "react-dnd-html5-backend";
 import ActiveTaskItem from "./ActiveTaskItem";
 
 class ActiveTaskList extends Component {
   constructor(prop) {
     super(prop);
-    // state
-    this.state = {
-      isDragging: false
-    };
     // bind
     this.throwUpdateTask = this.throwUpdateTask.bind(this);
     this.throwFinishTask = this.throwFinishTask.bind(this);
@@ -35,13 +33,6 @@ class ActiveTaskList extends Component {
     });
   }
 
-  handleMouseDown() {
-    this.setState({
-      isDragging: true
-    });
-    console.log(this.state.isDragging);
-  }
-
   render() {
     return (
       <ul className="todo-list">
@@ -58,4 +49,4 @@ ActiveTaskList.propTypes = {
   finishTask: PropTypes.func.isRequired
 };
 
-export default ActiveTaskList;
+export default  DragDropContext(HTML5Backend)(ActiveTaskList);
