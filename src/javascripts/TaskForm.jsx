@@ -1,5 +1,3 @@
-require("react-datepicker/dist/react-datepicker.css");
-
 import React, {Component, PropTypes} from "react";
 import DatePicker from "react-datepicker";
 import moment from "moment";

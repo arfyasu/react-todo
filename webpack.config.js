@@ -1,24 +1,24 @@
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
-  entry: {
-    app: __dirname + "/src/javascripts/app.jsx"
-  },
+  context: __dirname + "/src",
+  entry:['./javascripts/app.jsx', './stylesheets/app.scss'],
+
   output: {
     path: __dirname + '/dist/javascripts',
-    filename: '[name].js',
+    filename: 'app.js',
   },
   module: {
     preLoaders: [
       {
-        test: /\.jsx$/,
+        test: /\.(jx|jsx)$/,
         exclude: /node_modules/,
         loader: "eslint"
       }
     ],
     loaders: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         loader: "babel",
         query: {
@@ -26,20 +26,13 @@ module.exports = {
         }
       },
       {
-        test: /\.jsx$/,
-        exclude: /node_modules/,
-        loader: "babel",
-        query: {
-          presets: ['react', 'es2015']
-        }
-      },
-      {
-        test: /\.css$/,
-        loader: ExtractTextPlugin.extract("style-loader", "css-loader")
-      },
-      {
-        test: /\.scss$/,
+        test: /\.(css|scss)$/,
         loader: ExtractTextPlugin.extract("style-loader", "css-loader", "sass-loader")
+      },
+      //bootstrapのフォントまわりのため
+      {
+        test: /\.woff2?$|\.ttf$|\.eot$|\.svg$/,
+        loader: 'file'
       }
     ]
   },
@@ -54,5 +47,8 @@ module.exports = {
   ],
   eslint: {
     configFile: '.eslintrc'
+  },
+  devServer: {
+    contentBase: './dist'
   }
 };
