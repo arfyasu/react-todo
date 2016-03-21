@@ -99,10 +99,11 @@ class TaskList extends Component {
 
 
   render() {
+    const {tasks, finishedTasks} = this.state;
     return (
       <div>
-        <h2>TODO List</h2>
-        <ActiveTaskList tasks={this.state.tasks} finishTask={this.finishTask} updateTask={this.updateTask}
+        <h2>TODO List({tasks.length})</h2>
+        <ActiveTaskList tasks={tasks} finishTask={this.finishTask} updateTask={this.updateTask}
                         findTask={this.findTask} moveTask={this.moveTask}/>
 
         <ul className="todo-list">
@@ -110,7 +111,7 @@ class TaskList extends Component {
         </ul>
 
         <h2>Finished tasks</h2>
-        <FinishedTaskList tasks={this.state.finishedTasks} undoTask={this.undoTask}/>
+        <FinishedTaskList tasks={finishedTasks} undoTask={this.undoTask}/>
       </div>
     );
   }
