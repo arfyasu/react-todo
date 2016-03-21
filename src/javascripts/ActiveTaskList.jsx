@@ -21,7 +21,10 @@ class ActiveTaskList extends Component {
           finishTask={this.props.finishTask}
           updateTask={this.props.updateTask}
           findTask={this.props.findTask}
-          moveTask={this.props.moveTask}/>
+          moveTask={this.props.moveTask}
+          cancelEdit={this.props.cancelEdit}
+          editTask={this.props.editTask}
+          editing={this.props.editingTaskId === task.id}/>
       );
     });
   }
@@ -43,6 +46,9 @@ ActiveTaskList.propTypes = {
   finishTask: PropTypes.func.isRequired,
   findTask: PropTypes.func.isRequired,
   moveTask: PropTypes.func.isRequired,
+  editTask: PropTypes.func.isRequired,
+  cancelEdit: PropTypes.func.isRequired,
+  editingTaskId: PropTypes.number.isRequired,
   // Injected by React DnD:
   connectDropTarget: PropTypes.func.isRequired
 };

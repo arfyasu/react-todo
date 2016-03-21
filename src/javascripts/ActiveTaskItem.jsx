@@ -59,24 +59,14 @@ function collectTarget(connect) {
 class ActiveTaskItem extends Component {
   constructor(prop) {
     super(prop);
-    // state
-    this.state = {
-      edit: false
-    };
     // bind
     this.updateTask = this.updateTask.bind(this);
-    this.cancelEdit = this.cancelEdit.bind(this);
     this.handleClickFinishCheckBox = this.handleClickFinishCheckBox.bind(this);
     this.handleDoubleClickTaskName = this.handleDoubleClickTaskName.bind(this);
   }
 
   updateTask(form) {
     this.props.updateTask(form);
-    this.cancelEdit();
-  }
-
-  cancelEdit() {
-    this.setState({edit: false});
   }
 
   handleClickFinishCheckBox() {
@@ -84,7 +74,7 @@ class ActiveTaskItem extends Component {
   }
 
   handleDoubleClickTaskName() {
-    this.setState({edit: true});
+    this.props.editTask(this.props.task.id);
   }
 
   buildTask() {
@@ -104,12 +94,12 @@ class ActiveTaskItem extends Component {
   }
 
   render() {
-    const { connectDragSource, isDragging, connectDropTarget } = this.props;
+    const { connectDragSource, isDragging, connectDropTarget} = this.props;
     const opacity = isDragging ? 0 : 1;
     return connectDragSource(connectDropTarget(
       <li className="todo-list__item" style={{opacity}}>
-        {(this.state.edit)
-          ? <TaskForm submit={this.updateTask} cancel={this.cancelEdit} task={this.props.task}/>
+        {(this.props.editing)
+          ? <TaskForm submit={this.updateTask} cancel={this.props.cancelEdit} task={this.props.task}/>
           : this.buildTask()
         }
       </li>
@@ -128,6 +118,9 @@ ActiveTaskItem.propTypes = {
   finishTask: PropTypes.func.isRequired,
   findTask: PropTypes.func.isRequired,
   moveTask: PropTypes.func.isRequired,
+  editTask: PropTypes.func.isRequired,
+  cancelEdit: PropTypes.func.isRequired,
+  editing: PropTypes.bool.isRequired,
   // Injected by React DnD:
   isDragging: PropTypes.bool.isRequired,
   connectDragSource: PropTypes.func.isRequired,

@@ -4,39 +4,14 @@ import TaskForm from "./TaskForm";
 class NewTask extends Component {
   constructor(props) {
     super(props);
-    // state
-    this.state = {
-      edit: false
-    };
-    // bind
-    this.cancelEdit = this.cancelEdit.bind(this);
-    this.addTask = this.addTask.bind(this);
-    this.handleClickAddTaskLink = this.handleClickAddTaskLink.bind(this);
-  }
-
-  cancelEdit() {
-    this.setState({
-      edit: false
-    });
-  }
-
-  addTask(form) {
-    this.props.addTask(form);
-    this.cancelEdit();
-  }
-
-  handleClickAddTaskLink() {
-    this.setState({
-      edit: true
-    });
   }
 
   render() {
     return (
       <div>
-        {(this.state.edit)
-          ? <TaskForm submit={this.addTask} cancel={this.cancelEdit} task={{id: null, name: ""}}/>
-          : <button type="button" className="btn btn-link" onClick={this.handleClickAddTaskLink}>Add task</button>
+        {(this.props.editing)
+          ? <TaskForm submit={this.props.addTask} cancel={this.props.cancelEdit} task={{id: null, name: ""}}/>
+          : <button type="button" className="btn btn-link" onClick={this.props.editTask.bind(null, 0)}>Add task</button>
         }
       </div>
     );
@@ -44,7 +19,10 @@ class NewTask extends Component {
 }
 
 NewTask.propTypes = {
-  addTask: PropTypes.func.isRequired
+  addTask: PropTypes.func.isRequired,
+  editTask: PropTypes.func.isRequired,
+  cancelEdit: PropTypes.func.isRequired,
+  editing: PropTypes.bool.isRequired
 };
 
 export default NewTask;
