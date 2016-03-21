@@ -11,14 +11,14 @@ module.exports = {
   module: {
     preLoaders: [
       {
-        test: /\.(jx|jsx)$/,
+        test: /\.jx|jsx$/,
         exclude: /node_modules/,
         loader: "eslint"
       }
     ],
     loaders: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.js|jsx$/,
         exclude: /node_modules/,
         loader: "babel",
         query: {
@@ -26,7 +26,7 @@ module.exports = {
         }
       },
       {
-        test: /\.(css|scss)$/,
+        test: /\.css|scss$/,
         loader: ExtractTextPlugin.extract("style-loader", "css-loader", "sass-loader")
       },
       //bootstrapのフォントまわりのため
