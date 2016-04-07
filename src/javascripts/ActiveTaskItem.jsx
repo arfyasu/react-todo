@@ -78,19 +78,14 @@ class ActiveTaskItem extends Component {
   }
 
   buildTask() {
+    const {name, deadline} = this.props.task;
     return (
       <p>
         <input type="checkbox" onClick={this.handleClickFinishCheckBox}/>
-        <label onDoubleClick={this.handleDoubleClickTaskName} className="todo-list__item-text">
-          {this.props.task.name}
-        </label>
-        <span className="pull-right">{this.getDeadLine()}</span>
+        <label onDoubleClick={this.handleDoubleClickTaskName} className="todo-list__item-text">{name}</label>
+        <span className="pull-right">{deadline}</span>
       </p>
     );
-  }
-
-  getDeadLine() {
-    return (this.props.task.deadline) ? this.props.task.deadline.format("YYYY/MM/DD") : "";
   }
 
   render() {
@@ -111,7 +106,7 @@ ActiveTaskItem.propTypes = {
   task: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-    deadline: PropTypes.object,
+    deadline: PropTypes.string,
     finished: PropTypes.bool.isRequired
   }),
   updateTask: PropTypes.func.isRequired,

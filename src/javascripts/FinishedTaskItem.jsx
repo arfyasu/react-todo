@@ -11,17 +11,14 @@ class FinishedTaskItem extends Component {
     this.props.undoTask(this.props.task.id);
   }
 
-  getDeadLine() {
-    return (this.props.task.deadline) ? this.props.task.deadline.format("YYYY/MM/DD") : "";
-  }
-
   render() {
+    const {name, deadline} = this.props.task;
     return (
       <li className="todo-list__item todo-list__item--completed">
         <p>
           <input type="checkbox" onClick={this.handleClickCheckBox}/>
-          <label className="todo-list__item-text todo-list__item-text--completed">{this.props.task.name}</label>
-          <span className="pull-right todo-list__item-text--completed">{this.getDeadLine()}</span>
+          <label className="todo-list__item-text todo-list__item-text--completed">{name}</label>
+          <span className="pull-right todo-list__item-text--completed">{deadline}</span>
         </p>
       </li>
     );
@@ -32,7 +29,7 @@ FinishedTaskItem.propTypes = {
   task: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-    deadline: PropTypes.object,
+    deadline: PropTypes.string,
     finished: PropTypes.bool.isRequired
   }),
   undoTask: PropTypes.func.isRequired

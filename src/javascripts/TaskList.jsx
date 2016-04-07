@@ -8,9 +8,6 @@ class TaskList extends Component {
     super(prop);
     // state
     this.state = {
-      tasks: [],
-      finishedTasks: [],
-      nextId: 1,
       editingTaskId: -1
     };
     // bind
@@ -24,6 +21,30 @@ class TaskList extends Component {
     this.editTask = this.editTask.bind(this);
   }
 
+  componentWillMount() {
+    const tasks = this.loadTasks("tasks");
+    const finishedTasks = this.loadTasks("finishedTasks");
+    let nextId = 0;
+    tasks.concat(finishedTasks).forEach(task => {
+      if (task.id > nextId) {
+        nextId = task.id;
+      }
+    });
+    nextId++;
+    this.setState({tasks, finishedTasks, nextId});
+  }
+
+  loadTasks(key) {
+    //return [];
+    try {
+      const tasks = localStorage.getItem(key);
+      return (!tasks || tasks === "undefined") ? [] : JSON.parse(tasks);
+    } catch (e) {
+      return [];
+    }
+  }
+
+
   createTask(form) {
     var newTask = {
       id: this.state.nextId,
@@ -31,10 +52,8 @@ class TaskList extends Component {
       deadline: form.deadline,
       finished: false
     };
-    this.setState({
-      tasks: this.state.tasks.concat([newTask]),
-      nextId: this.state.nextId + 1
-    });
+    this.saveTasks(this.state.tasks.concat([newTask]));
+    this.setState({nextId: this.state.nextId + 1});
     this.cancelEdit();
   }
 
@@ -62,10 +81,8 @@ class TaskList extends Component {
         tasks.push(task);
       }
     });
-    this.setState({
-      tasks: tasks,
-      finishedTasks: [finishedTask].concat(this.state.finishedTasks)
-    });
+    this.saveTasks(tasks);
+    this.saveFinishedTasks([finishedTask].concat(this.state.finishedTasks));
   }
 
   undoTask(id) {
@@ -79,10 +96,8 @@ class TaskList extends Component {
         finishedTasks.push(task);
       }
     });
-    this.setState({
-      tasks: this.state.tasks.concat([undoTask]),
-      finishedTasks: finishedTasks
-    });
+    this.saveTasks(this.state.tasks.concat([undoTask]));
+    this.saveFinishedTasks(finishedTasks);
   }
 
   findTask(id) {
@@ -99,7 +114,17 @@ class TaskList extends Component {
     let { task, index } = this.findTask(id);
     tasks.splice(index, 1);
     tasks.splice(toIndex, 0, task);
+    this.saveTasks(tasks);
+  }
+
+  saveTasks(tasks) {
     this.setState({tasks});
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }
+
+  saveFinishedTasks(finishedTasks) {
+    this.setState({finishedTasks});
+    localStorage.setItem("finishedTasks", JSON.stringify(finishedTasks));
   }
 
   cancelEdit() {

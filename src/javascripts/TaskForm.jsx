@@ -5,24 +5,26 @@ import moment from "moment";
 class TaskForm extends Component {
   constructor(props) {
     super(props);
-    // state
-    this.state = {
-      name: this.props.task.name,
-      deadline: this.props.task.deadline || moment()
-    };
     // bind
     this.handleClickSubmitButton = this.handleClickSubmitButton.bind(this);
     this.handleChangeTaskNameText = this.handleChangeTaskNameText.bind(this);
     this.handleChangeDeadLine = this.handleChangeDeadLine.bind(this);
   }
 
+  componentWillMount() {
+    const {name, deadline} = this.props.task;
+    this.setState({name,
+      deadline: deadline ? moment(deadline, "YYYY/MM/DD") : moment()
+    });
+  }
+
   handleClickSubmitButton() {
-    var name = this.state.name;
+    const {name, deadline}  = this.state;
     if (name.length > 0) {
       this.props.submit({
         id: this.props.task.id,
-        name: name,
-        deadline: this.state.deadline
+        name,
+        deadline: deadline ? deadline.format("YYYY/MM/DD") : ""
       });
     }
   }
@@ -67,7 +69,7 @@ TaskForm.propTypes = {
   task: PropTypes.shape({
     id: PropTypes.number,
     name: PropTypes.string.isRequired,
-    deadline: PropTypes.object
+    deadline: PropTypes.string
   }),
   submit: PropTypes.func.isRequired,
   cancel: PropTypes.func.isRequired
